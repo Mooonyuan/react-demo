@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // JXS
+      function great(user) {
+        return user.firstName + ' ' + user.lastName; 
+      }
+      function formatName(user) {
+        if( user ){
+          return <h1>Hello,{great(user)}!</h1>;
+        }else{
+          return <h1>stranger</h1>
+        }
+      }
+
+      const me = {
+        firstName : 'Xu',
+        lastName: 'quan'
+      }
+
+      const element = <h1 class="test">hello,{formatName(me)}</h1>
+
+      // function tick(){
+      //   const tickElement = (
+      //     <div>
+      //       <h1>hello World</h1>
+      //       <h2> It is {new Date().toLocaleTimeString()}</h2>
+      //     </div>
+      //   )
+      //   ReactDOM.render(
+      //     tickElement,
+      //     document.getElementById('root')
+      //   );
+      // }
+      // setInterval(tick,1000);
+
+      function Welcome(props){
+        
+        return <h1>hello, {props.name}</h1>;
+        
+      }
+      const nameProp = <Welcome name="quan"/>;
+
+      ReactDOM.render(
+        nameProp,
+        document.getElementById('root')
+      );
+
+  
+      
+
+    </script>
+
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "react-demo",
+  "version": "1.0.0",
+  "description": "learn react v.0.1",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mooonyuan/react-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mooonyuan/react-demo/issues"
+  },
+  "homepage": "https://github.com/Mooonyuan/react-demo#readme",
+  "devDependencies": {
+  }
+}
