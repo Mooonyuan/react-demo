@@ -12,23 +12,23 @@
     <div id="root"></div>
     <script type="text/babel">
       // JXS
-      function great(user) {
-        return user.firstName + ' ' + user.lastName; 
-      }
-      function formatName(user) {
-        if( user ){
-          return <h1>Hello,{great(user)}!</h1>;
-        }else{
-          return <h1>stranger</h1>
-        }
-      }
+      // function great(user) {
+      //   return user.firstName + ' ' + user.lastName; 
+      // }
+      // function formatName(user) {
+      //   if( user ){
+      //     return <h1>Hello,{great(user)}!</h1>;
+      //   }else{
+      //     return <h1>stranger</h1>
+      //   }
+      // }
 
-      const me = {
-        firstName : 'Xu',
-        lastName: 'quan'
-      }
+      // const me = {
+      //   firstName : 'Xu',
+      //   lastName: 'quan'
+      // }
 
-      const element = <h1 class="test">hello,{formatName(me)}</h1>
+      // const element = <h1 class="test">hello,{formatName(me)}</h1>
 
       // function tick(){
       //   const tickElement = (
@@ -44,23 +44,440 @@
       // }
       // setInterval(tick,1000);
 
-      function Welcome(props){
+      // function Welcome(props){
         
-        return <h1>hello, {props.name}</h1>;
+      //   return <h1>hello, {props.name}</h1>;
         
+      // }
+      // const nameProp = <Welcome name="quan"/>;
+
+      //组件和props
+      
+      //时间
+      //  function formatDate(data){
+      //    return data.toLocaleTimeString();
+      //  }
+      //个人信息的图片
+      //  function Avatar(props){
+      //    return (
+      //      <img className="Avatar"
+      //           src={props.user.avatarUrl}
+      //           alt={props.user.name} />
+      //    )
+      //  }
+      //个人信息
+      //  function UserInfo(props){
+      //    return (
+      //     <div className="UserInfo">
+      //       <Avatar user = {props.user} />
+      //       <div className="UserInfo-name">
+      //         {props.user.name}  
+      //       </div>  
+      //     </div>
+      //    )
+      //  }
+      //主组件
+      // function Comment(props){
+      //   return (
+      //     <div className="Comment">
+      //       <div className="UserInfo">
+      //         <UserInfo user={props.author} />
+      //         <div className="Comment-text">
+      //           {props.text}
+      //         </div>
+      //         <div className="Comment-date">
+      //           {formatDate(props.date)}
+      //         </div>
+      //       </div>  
+      //     </div>
+      //   )
+      // }
+      //显示信息
+      // const comment = {
+      //   date : new Date(),
+      //   text : 'quanuqan',
+      //   author : {
+      //     name : 'heng',
+      //     avatarUrl : 'http://placekitten.com/g/64/64'
+      //   }
+      // }
+      //显示
+      // ReactDOM.render(
+      //   <Comment 
+      //     date = {comment.date}
+      //     text = {comment.text}
+      //     author = {comment.author}
+      //   />,
+      //   document.getElementById('root')
+      // );
+
+      //生命周期
+      //时钟
+      class Clock extends React.Component{
+        //修改date
+        constructor(props) {
+          super(props);
+          this.state = { date : new Date() }
+        }
+        //输出到dom后执行
+        componentDidMount() {
+          this.timeID = setInterval(
+            () => this.tick(),
+            1000
+          )
+        }
+        //不使用时清除
+        componentWillUnmount() {
+          clearInterval(this.timeID);
+        }
+        //计时
+        tick() {
+          this.setState({
+            date: new Date()
+          })
+        }
+        render() {
+          return (
+            <div>
+              <h1> hello World </h1>
+              <h2> it is {this.state.date.toLocaleTimeString()}</h2>  
+            </div>
+          )
+        }
       }
-      const nameProp = <Welcome name="quan"/>;
+
+      //开关按钮
+      class Toggle extends React.Component{
+        //默认初始值
+        constructor(props){
+          super(props);
+          this.state = {isToggleOn : true};
+          // This binding is necessary to make `this` work in the callback
+          this.handleClick = this.handleClick.bind(this);
+        }
+        //切换事件
+        handleClick() {
+          this.setState(prevState => ({
+            isToggleOn : !prevState.isToggleOn
+          }))
+        }
+        //dom
+        render() {
+          return (
+            <button onClick={this.handleClick}>
+              {this.state.isToggleOn ? 'ON' : 'OFF'}
+            </button>
+          )
+        }
+      }
+
+      //阻止组件渲染
+      function WarningBanner(props){
+        if( !props.warn ){
+          return null;
+        }
+        return(
+          <div className="warning">
+            Warning!
+          </div>
+        )
+      }
+      //page 组件
+      class Page extends React.Component{
+        constructor(props){
+          super(props);
+          this.state = {showWarning : true}
+          this.handleToggleClick = this.handleToggleClick.bind(this)
+        }
+        handleToggleClick() {
+          this.setState(prevState =>( {
+            showWarning : !prevState.showWarning
+          }))
+        }
+        render() {
+          return (
+            <div>
+              <WarningBanner warn = {this.state.showWarning} />
+              <button onClick= { this.handleToggleClick }>
+                { this.state.showWarning ? 'hide' : 'show' }
+              </button>  
+            </div>
+          )
+        }
+      }
+
+      //输入框
+
+      class NameForm extends React.Component{
+        constructor(props){
+          super(props);
+          this.state = {value : ''}
+
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+
+        }
+        handleChange(e) {
+          //全部输入大写
+          this.setState({value : e.target.value.toUpperCase()})
+        }
+        //提交
+        handleSubmit(e) {
+          console.log('a name was submitted: ' + this.state.value);
+          e.preventDefault();
+        }
+        render() {
+          return (
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                Name: 
+                <input type="text" value={this.state.value} onChange={this.handleChange} />  
+                <input type="submit" value="submit" />
+              </label>  
+            </form>
+          )
+        }
+      }
+
+      //多个输入框
+      
+      class Reservation extends React.Component{
+        constructor(props){
+          super(props);
+          this.state = {
+            isGoing : true,
+            numberOfGuests : 2
+          }
+          this.handleInputChange = this.handleInputChange.bind(this);
+          this.handleInputSubmit = this.handleInputSubmit.bind(this);
+        }
+        handleInputChange(e){
+          const target = e.target;
+          const value = target.type === 'checkbox' ? target.checked : target.value;
+          const name = target.name;
+          this.setState ({
+            [name] : value
+          })
+          // console.log(this.state.isGoing)
+          // console.log(this.state.numberOfGuests)
+        }
+        handleInputSubmit(e){
+          console.log( this.state )
+          e.preventDefault();
+        }
+        render(){
+          return (
+            <form onSubmit={this.handleInputSubmit}>
+              <label>
+                Is going:
+                <input 
+                  name="isGoing"
+                  type="checkbox"
+                  checked={this.state.isGoing}
+                  onChange={this.handleInputChange}/>  
+              </label>
+              <label>
+                Number of Guests:
+                <input
+                name="numberOfGuests"
+                type="number"
+                value={this.state.numberOfGuests}
+                onChange={this.handleInputChange}/>  
+              </label>
+              <input type="submit" value="submit" />
+            </form>
+          )
+        }
+      }
+
+      //状态提升
+      //输入温度
+      function BoilingVerdict(props){
+        if( props.celsius >= 100 ){
+          return <p>水会烧开</p>;
+        }
+        return <p>水不会烧开</p>
+      }
+      //实现数据的绑定
+      //温度组件
+      const scaleNames = {
+        c: 'Celsius',
+        f: 'Fshrenheit'
+      }
+      //摄氏度和华氏度的转换
+      function toCelsius(fahrenheit) {
+        return (fahrenheit - 32) * 5 / 9;
+      }
+
+      function toFahrenheit(celsius) {
+        return (celsius * 9 / 5) + 32;
+      }
+      function tryConvert(temprature,convert){
+        const input = parseFloat(temprature);
+        if( Number.isNaN(input) ){
+          return '';
+        }
+        const output = convert(input);
+        const rounded = Math.round(output*1000) / 1000;
+        return rounded.toString();
+      }
+      //子组件
+      class Calculator extends React.Component{
+        constructor(props){
+          super(props);
+          //之前:改变自身的数据
+          // this.state = {temprature : ''}
+          this.handleChange = this.handleChange.bind(this);
+        }
+        
+        handleChange(e){
+          //之前：改变自身的数据
+          // this.setState({temprature: e.target.value});
+          //之后：改变父组件的数据
+          this.props.onTemperatureChange(e.target.value);
+        }
+
+        render(){
+          //之前：改变自身的数据
+          // const temprature = this.state.temprature;          
+          // const scale = this.props.scale;
+          //之后：改变父组件的数据
+          const temprature = this.props.temprature;
+          const scale = this.props.scale;
+          return (
+            <fieldset>
+              <legend>输入一个 {scaleNames[scale]} :</legend>
+              <input 
+                value={temprature}
+                onChange={this.handleChange}/>
+            </fieldset>
+          )
+        }
+
+
+
+      }
+      //父组件
+      class CalculatorInput extends React.Component{
+        constructor(props){
+          super(props);
+          this.state = {temprature :'',scale: 'c'};
+          this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+          this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+        }
+        handleCelsiusChange(temprature){
+          this.setState({scale:'c',temprature});
+        } 
+        handleFahrenheitChange(temprature){
+          this.setState({scale:'f',temprature});
+        } 
+        render(){
+          const scale = this.state.scale;
+          const temprature = this.state.temprature;
+          const celsius = scale === 'f' ? tryConvert( temprature,toCelsius ) : temprature;
+          const fahrenheit = scale === 'c' ? tryConvert( temprature,toFahrenheit ) : temprature;
+          return (
+            <div>
+              <Calculator scale="c" temprature={celsius} onTemperatureChange={this.handleCelsiusChange}/>
+              <Calculator scale="f" temprature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange}/>
+              <BoilingVerdict celsius={parseFloat(celsius)} />
+            </div>
+          )
+        }
+      }
+
+      //组合和继承
+      //props.children
+      function FancyBorder(props){
+        return (
+          <div className={'FancyBorder FancyBorder-' + props.color}>
+            {props.children}
+          </div>
+        )
+      }
+
+      function WelcomeDialog(){
+        return (
+          <FancyBorder color="blue">
+            <h1>Welcome</h1>
+          </FancyBorder>
+        )
+      }
+
+      //不使用children 自己约定
+      function SplidtPane(props){
+        return (
+          <div className="splitPane">
+            <div className="splitPane-left">
+              {props.left}  
+            </div>  
+            <div className="splitPane-right">
+              {props.right}
+            </div>
+          </div>
+        )
+      }
+      function Contacts(props){
+        return (
+          <div className="contacts">
+            hello contacts!  
+          </div>
+        )
+      }
+      function Chat(props){
+        return (
+          <div className="chat">
+            hello chat!  
+          </div>
+        )
+      }
+      function Split(){
+        return (
+          <SplidtPane left={<Contacts />} right={<Chat />}/>
+        )
+      }
+      
+      //组件存入页面
+      class Wrap extends React.Component{
+        render(){
+          return (
+            <div>
+              <Page />
+              <Clock />
+              <Toggle />
+              <NameForm />
+              <Reservation />
+              <CalculatorInput />
+              <WelcomeDialog />
+              <Split />
+            </div>
+          )
+        }
+      }
 
       ReactDOM.render(
-        nameProp,
-        document.getElementById('root')
-      );
+          <Wrap />,
+          document.getElementById('root')
+        )
+      
+      // function tick(){
+      //   ReactDOM.render(
+      //     <Clock />,
+      //     document.getElementById('root')
+      //   )
+      // }
 
+      // setInterval(tick,1000)
   
       
 
     </script>
 
     <script src="index.js"></script>
+    <style>
+      .FancyBorder-blue{
+        border: 1px solid blue;
+      }
+    </style>
   </body>
 </html>
